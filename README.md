@@ -84,7 +84,7 @@ La parte de **Análisis del Dato** consiste en la aplicación de los conocimient
 1. Se decidirá normalmente el modelo apropiado para el caso hipotético escogido.
 
 2. Se realizará el modelo en su lenguaje de programación nativo. Si dicho lenguaje es R, que es lo más probable, también se realizará su equivalente en Python. En tal caso, se hará un análisis de la sintaxis del código de ambos lenguajes y se compararán. En el caso de los modelos *ARIMA*, la función `auto.arima()`, del paquete `forecast` de R, y la función `auto_arima()`, del paquete `pmdarima` de Python, se usarán solo para validación de resultados y no se considerará el modelo como apropiadamente aplicado por su uso, si no que se realizará el análisis paso a paso.
-3. Se interpretará cada modelo de cada lenguaje, observando discrepancias entre resultados si las hubiera. Esto prepara el terreno para usar el paquete `pyrcore` el análisis de su utilidad en la tercera parte, a entregar en mayo.
+3. Se interpretará cada modelo de cada lenguaje, observando discrepancias entre resultados si las hubiera. Esto prepara el terreno para usar el paquete `pyrcore` en el análisis de su utilidad en la tercera parte, a entregar en mayo.
 </details>
 
 ### 3. Análisis de Negocio
