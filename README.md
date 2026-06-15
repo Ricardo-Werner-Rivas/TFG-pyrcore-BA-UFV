@@ -1,24 +1,8 @@
 # TFG `pyrcore`: Business Analitics UFV
-Este repositorio contiene el código para el <ins>Trabajo de Fin de Grado</ins> (TFG, en adelante).
+Este proyecto ha cambiado mucho desde su concepción en el anteproyecto. En un inicio consistía en fusionar dos lenguajes de programación ligeramente para aprovechar sus puntos fuertes. Actualmente se ha convertido en un proyecto orientado a la creación de un producto, aunque este sea de código abierto, que permita integrar ambos lenguajes de programación, R y Python, a nivel sintáctico para permitir a los equipos de analistas trabajar con los puntos fuertes de ambos en un solo lenguaje. La eficiencia no es prioridad para este proyecto, por cuestiones de tiempo, aunque pretendo corregirlo en el futuro.
 
-A continuación, se hace una explicación del funcionamiento del proyecto.
-<details>
-<summary><b>Consideraciones previas</b></summary>
+El paquete `pyrcore` replica los vectores, matrices y series temporales univariantes de R mediante **P**rogramación **O**rientada a **O**bjetos (**POO**). Los detalles se encuentran más adelante. Los objetos tienen attributos de R como propiedades y poseen algunas de las características de algunos objetos de *Pandas* para facilitar su integración con librerías de análisis de datos, a pesar de que la librería `pandas` no se ha usado para programar las funcionalidades no relacionadas con transformar el objeto a objeto `pandas`, sino que estas características se han replicado independientemente.
 
-El presente proyecto consiste en la creación de un paquete de Python (`pyrcore`) que permita fusionar las ventajas de los lenguajes de programación R y Python mediante la replicación de objetos R con **P**rogramación **O**rientada a **O**bjetos (**POO**, en adelante).
-
-Si bien técnicamente es un proyecto de investigación, pues su objetivo es la creación de una herramienta, uno no podía presentar sus propios temas de investigación, sino postularse a uno de los existentes. Debido a esto, se me pidió que adaptase la estructura del trabajo al modelo de <ins>Trabajo de Consultoría</ins>.
-
-Dadas las circunstancias mencionadas, es importante aclarar un aspecto clave: **`pyrcore`** es el **centro** de este proyecto. Eso no significa que los análisis vayan a dejarse de lado. Todas las partes del TFG conservarán su rigor académico, pero el centro de atención se desplaza hacia el paquete `pyrcore`, volviendo los análisis un aspecto menos relevante.
-
-El análisis se realiza en calidad de prueba de contraste, comparando sintaxis de código y los resultados de su ejecución.
-
-Dado que también se utiliza código R para el contraste, cada modelo se hará más de una vez.
-
-Dada la naturaleza del proyecto, se elegirá un caso distinto según el modelo que se quiera comprobar.
-
-Por último, dado que los modelos de análisis no resuelven un problema, sino que es `pyrcore` el que lo hace, para la realización de modelos se usarán casos hipotéticos creados *ad-hoc*.
-</details>
 <details>
 <summary>Enlaces relevantes</summary>
 <table>
@@ -45,59 +29,56 @@ Por último, dado que los modelos de análisis no resuelven un problema, sino qu
 </details>
 
 ## `pyrcore`
-El paquete `pyrcore` es una librería programada en Python puro, basado en `arrays` de **NumPy**, que importa objetos R tales como vectores y su función de combinación (`c()`), matrices (`matrix`) y series temporales (`ts`) a Python mediante POO con abstracción y estructura modular. Aunque el paquete es de código abierto, amparado bajo una licencia [MIT](https://github.com/Ricardo-Werner-Rivas/pyrcore/blob/PyPI/LICENSE), ha sido creado expresamente para este TFG y, de hecho, es su núcleo.
+El paquete `pyrcore` es una librería programada en Python puro que aporta a Python clases basadas en diversos objetos R y algunas de sus funciones. Las clases envuelven `arrays` de `NumPy` u otras clases de la librería y tienen métodos y propiedades que imitan varias funciones de R relacionadas con los atributos de los objetos. Los atributos de R de las instancias se almacenan en un diccionario que es un atributo de instancia, pero también son accesibles mediante la sintaxis `<instancia>.<atributo>` como si fueran atributos de instancia. Así, por ejemplo, para obtener o modificar los nombres de un vector `v` llamaríamos a `v.names` en lugar de `names(v)`.
 
-El paquete se está diseñando en un repositorio de GitHub aparte, al que se puede acceder mediante este [enlace](https://github.com/Ricardo-Werner-Rivas/pyrcore). El motivo de esto es que se espera que su vida útil se prolongue más allá de la duración de este TFG y que, por tanto, se le dé soporte. También se puede consultar el proyecto `pyrcore` en [PyPI](https://pypi.org/project/pyrcore/) o en [TestPyPI](https://test.pypi.org/project/pyrcore/).
+El paquete se está desarrollando en un repositorio de GitHub aparte, al que se puede acceder mediante este [enlace](https://github.com/Ricardo-Werner-Rivas/pyrcore). El motivo de esto es que se espera que su vida útil se prolongue más allá de la duración de este TFG y que, por tanto, se le dé soporte y siga siendo de **código abierto**. También se puede consultar el proyecto `pyrcore` en [PyPI](https://pypi.org/project/pyrcore/) o en [TestPyPI](https://test.pypi.org/project/pyrcore/).
 
-Debido a que es un proyecto de código abierto, aunque las contribuciones están limitadas a mí hasta que el TFG sea evaluado, tanto la documentación como los comentarios del código como los *commits* están en **inglés**.
 ### Funcionalidades
-El paquete `pyrcore` aspira a implementar las siguientes funcionalidades:
-* Vectores atómicos de R: **Estable** (clase `Vector`)
-* Función de combinación `c()`, para la creación de vectores: **Estable** (función `c()`)
-* Matrices de R y función `matrix()`: **Estable** (clase `matrix`)
-* Clase `ts` (*time-series*: serie temporal) de R: <ins>**En desarrollo**</ins> (clase `TimeSeries`)
-* Clase `mts` (*multivariate time-series*: serie temporal multivariante)
-* Función `ts()`, constructora de `ts` y `mts`
-* Herramientas de integración con los algoritmos de los modelos en Python
+Los objetos aportados por `pyrcore` son:
+* Clase `Vector`: vectores atómicos, aunque se permiten vectores multitipo si se pasa el tipo `object`. Utilizan un `array` unidimensional como núcleo y admite nombres.
+
+* Función `c()`: función de combinación `c()` para la creación de vectores.
+* Clase `matrix`: matrices. Utilizan un `array` bidimensional como núcleo y también puede ser multitipo si se pasa el tipo `object`.
+* Clase `TimeSeries`: series temporales univariantes (`ts` en R). Usan vectores como núcleo.
+* ~~Clase `MultiVariateTimeSeries`~~: series temporales multivariantes (`mts` en R). Usan matrices como núcleo. Implementan las propiedades `loc` y `iloc` de los `DataFrame`s de *Pandas*. Aún están en desarrollo y no van a usarse en el proyecto por ese motivo.
+* Función `ts()`: Función constructora de series temporales, que distinguirá cuál de los dos tipos de serie debe crear. Se ha implementado una versión provisional que solo construye series univariantes mientras se termina el desarrollo de las series multivariantes.
+* Las clases `TimeSeries` y `MultiVariateTimeSeries` implementan el método `to_pandas` como herramienta provisional de integración con librerías de análisis de datos, que podrían esperar objetos `pandas.Series` o `pandas.DataFrame`.
+
 ## Proyecto
-El proyecto consta de tres partes claramente diferenciadas:
+El proyecto se divide en tres partes:
+1. Ingeniería del Dato.
+
+2. Análisis del Dato.
+3. Análisis de Negocio.
+
+Estas partes se desarrollarán sobre un caso de estudio que ha sido escogido para ilustrar la diferencia sintáctica entre R y Python y la comodidad que puede aportar `pyrcore` al análisis de datos en Python, especialmente en proyectos en los que normalmente se usarían ambos lenguajes o en los que R no se puede utilizar, aunque sería lo más sencillo, por su falta de escalabilidad y se acaban utilizando herramientas como *PySpark*.
+
+El caso de estudio es el siguiente: *Análisis temporal de las series de producción de gas de esquisto en varios sitios de EEUU para el periodo enero de 2000 a agosto de 2022 (2000.01-2022.08).* Modelo *ARIMA*. Para ello se dispone de un *dataset* con distintas series temporales de la producción de gas de esquisto. Este *dataset* se obtuvo en la asignatura de Econometría como parte del trabajo final de la asignatura. Debe elegirse una serie temporal del *dataset* y aplicar un modelo *ARIMA* sobre ella. Utilizaré una serie temporal distinta de la que escogí para dicho proyecto final de Econometría.
+
 ### 1. Ingeniería del Dato
-La parte de **Ingeniería del Dato** consiste en la extracción y limpieza de los datos que van a utilizarse y será algo distinta en este TFG.
-<details>
-<summary><b>Esquema</b>:</summary>
+1. Extracción de la serie temporal escogida desde el fichero proporcionado.
 
-1. Se decidirá qué casos hipotéticos se estudiarán en el TFG.
+2. Correcciones de formato y tipado de los datos.
+3. Análisis exploratorio de los datos con R.
+4. Anotación de las transformaciones requeridas para el modelo *ARIMA*.
 
-2. Se seleccionarán los *datasets* que se usarán para tal fin, preferiblemente de entre los que ya han sido preseleccionados.
-3. Se extraerán los *datasets* seleccionados. Los *datasets* preseleccionados ya han sido extraídos para la entrega del anteproyecto, pero volverán a extraerse si siguen disponibles en sus fuentes.
-</details>
-
-#### Casos de estudio
-Se ha asignado un caso de estudio a cada una de las funcionalidades relevantes (`ts` y `mts`):
-1. Para series temporales univariantes, se aplica el siguiente caso de estudio: *Análisis temporal de las series de producción de gas de esquisto en varios sitios de EEUU para el periodo enero de 2000 a agosto de 2022 (2000.01-2022.08).* Modelo *ARIMA*.
-2. Para series temporales multivariantes, se aplica el siguiente caso de estudio: *Análisis temporal de una serie temporal multivariante de la bolsa china para crear un modelo capaz de predecir su comportamiento.* Modelo *VAR*.
 ### 2. Análisis del Dato
-La parte de **Análisis del Dato** consiste en la aplicación de los conocimientos estadísticos adquiridos durante el grado mediante la aplicación de modelos automatizados en lenguajes como Python o R, que son los dos lenguajes de programación enseñados durante el grado. En el caso de esta segunda parte, el procedimiento se realiza normalmente, sin perjuicio de que haya ligeras variaciones.
+1. Aplicación del modelo *ARIMA* en R.
+
+2. Aplicación del modelo *ARIMA* en Python.
+3. Interpretación del resultado del modelo para cada lenguaje (que debería ser la misma).
+4. Comparación sintáctica del código de ambos procedimientos.
 <details>
-<summary><b>Esquema</b>:</summary>
+<summary><b>NOTA</b>:</summary>
 
-1. Se decidirá normalmente el modelo apropiado para el caso hipotético escogido.
-
-2. Se realizará el modelo en su lenguaje de programación nativo. Si dicho lenguaje es R, que es lo más probable, también se realizará su equivalente en Python. En tal caso, se hará un análisis de la sintaxis del código de ambos lenguajes y se compararán. En el caso de los modelos *ARIMA*, la función `auto.arima()`, del paquete `forecast` de R, y la función `auto_arima()`, del paquete `pmdarima` de Python, se usarán solo para validación de resultados y no se considerará el modelo como apropiadamente aplicado por su uso, si no que se realizará el análisis paso a paso.
-3. Se interpretará cada modelo de cada lenguaje, observando discrepancias entre resultados si las hubiera. Esto prepara el terreno para usar el paquete `pyrcore` en el análisis de su utilidad en la tercera parte, a entregar en mayo.
+La función `auto.arima()` del paquete `forecast` de R y la función `auto_arima()` del paquete `pmdarima` de Python se usarán solo para validación de resultados y no se considerará el modelo como apropiadamente aplicado por su uso, si no que se realizará el análisis paso a paso.
 </details>
 
 ### 3. Análisis de Negocio
-En esta última parte se concreta una conclusión final del trabajo hecho y se introduce el uso del paquete `pyrcore`. Con `pyrcore` se replican los pasos de los modelos hechos con Python, comparando la sintaxis del código y los resultados. A continuación, y nuevamente, se exponen las diferencias de este TFG con un Trabajo de Consultoría clásico.
-<details>
-<summary><b>Esquema</b>:</summary>
+1. Se utiliza `pyrcore` para repetir el modelo *ARIMA* hecho en Python y se comparan sintaxis, resultados y conclusiones. Este paso es pura repetición, y no requiere esfuerzo lógico alguno, motivo por el que lo ubico en esta parte, dado que organizarlo así permite que ninguna de las tres partes quede muy sobrecargada.
 
-1. Se dará una conclusión por cada modelo realizado sobre un mismo *dataset*. Si se hubiere realizado múltiples veces un mismo modelo, por haberlo realizado en distintos lenguajes se dará una conclusión **por cada repetición** del modelo y se compararán.
-
-2. Se utiliza `pyrcore` para repetir los modelos hechos en Python y se comparan sintaxis, resultados y conclusiones. Este paso es pura repetición, y no requiere esfuerzo lógico alguno, motivo por el que lo ubico en este punto, dado que organizarlo así permite que ninguna de las tres partes quede muy sobrecargada.
-3. En base a lo anterior, se extraerá una conclusión sobre la utilidad del paquete `pyrcore` para el análisis, y/o ciencia, de datos.
-4. Finalmente, se dará una conclusión final sobre la utilidad del paquete `pyrcore` en el ámbito del negocio. En la conclusión se mencionará explícitamente si se ha solucionado el problema o no o, en su defecto, si se ha visto mitigado y en qué medida.
-</details>
+2. En base a lo anterior, se extraerá una conclusión sobre la utilidad del paquete `pyrcore` para el análisis, y/o ciencia, de datos.
+3. Finalmente, se dará una conclusión final sobre la utilidad del paquete `pyrcore` en el ámbito del negocio. En la conclusión se mencionará explícitamente si se ha solucionado el problema o no o, en su defecto, si se ha visto mitigado y en qué medida.
 
 ## Resultado esperado
 Se espera que `pyrcore` pueda aportar al mundo de la ciencia y el análisis de datos mediante la integración, total o parcial, de la potencia estadística de R en el lenguaje escalable Python.
@@ -105,6 +86,7 @@ Se espera que `pyrcore` pueda aportar al mundo de la ciencia y el análisis de d
 Sin embargo, <ins>no favorable</ins> sería un resultado válido para el TFG, pues se pretende estudiar su impacto para el análisis y la ciencia de datos. Dicho lo cual, un servidor considera este resultado altamente improbable, puesto que, en el peor de los casos, se concluiría que las herramientas de integración con las librerías de modelización no funcionan correctamente, lo que no vuelve el paquete `pyrcore` una solución inútil.
 
 Evidentemente, una de las conclusiones será que se debe seguir trabajando en la eficiencia, hablando de tiempo de ejecución del código, de las clases y funciones del paquete, ya que lo ideal es usar extensiones de C/C++, leguaje que no forma parte del contenido del grado, para un paquete así. En su lugar se utilizan, como base de los objetos, `arrays` de la librería **NumPy**, que funcionan de forma aritméticamente similar a los vectores y matrices de R y están programados con C/C++, que son altamente eficientes.
+
 ## Política de uso de Inteligencia Artificial
 El uso de **I**nteligencia **A**rtificial (**IA**, en adelante) generativa está estrictamente limitado a mi aprendizaje. Gracias a su uso, refiriéndome especialmente a ChatGPT, he podido aprender extremadamente rápido a aplicar conceptos de programación que a un estudiante que solo ha tenido tres asignaturas cuatrimestrales de programación con lenguajes distintos le resultarían increíblemente complejas. Los modelos LLM proporcionan un hilo del que tirar, pero no pueden ni deben programar en lugar del programador. El *vibe coding* no es solo imposible en la práctica sino que es una lacra para los profesionales serios.
 
